@@ -1,0 +1,51 @@
+# -*- mode: python -*-
+# -*- coding: utf-8 -*-
+
+# Only the 'checkoutroot' option needs to be specified, but to try and 
+# save some disk space, lets also tell jhbuild a common (network share) 
+# location for it to store its full git repository mirrors. Also, try to 
+# have it perform a shallow clone if possible, again to reduce disk use.
+#dvcs_mirror_dir = '~/Development/wayland-tablet/builddir/mirror'
+checkoutroot = '~/Development/wayland-tablet/builddir/checkout'
+shallow_clone = True
+
+# Overriding the buildroot from its default (of checkoutroot) causes 
+# heartburn for several builds. Don't bother setting it.
+buildroot = checkoutroot
+
+# the prefix to configure/install modules to (must have write access)
+prefix = '~/Development/wayland-tablet/builddir/install'
+
+moduleset = [ 'gnome-apps-3.18', 'https://raw.githubusercontent.com/wayland-tablet/build-data/gnome-mods-3.18.modules' ]
+#use_local_modulesets = True
+
+modules = [ 'clutter', 'gtk+', 'libinput', 'mutter', 'wayland', 'wayland-protocols', 'weston', 'xwayland' ]
+
+# Wayland tablet support branches
+# To build from a local repository, use the syntax branches['foo'] = ('file://<path>', 'branch')
+# Default branch: tablet-support-20151221
+#branches['clutter']           = (None, 'wip/evdev-tablet-support')
+#branches['gtk+']              = (None, 'wip/wayland-tablet')
+#branches['libinput']          = (None, 'tablet-support')
+#branches['mutter']            = (None, 'wip/tablet-protocol-v3')
+#branches['wayland']           = (None, 'master')
+#branches['wayland-protocols'] = (None, 'add/tablet-support/1.1')
+#branches['weston']            = (None, 'add/tablet-support/1.0.1')
+#branches['xwayland']          = (None, 'add/xwayland-tablet-support/0.4')
+
+# Try to use the tagged 1.22.0 cogl release (https://bugzilla.gnome.org/show_bug.cgi?id=758073)
+branches['cogl'] = (None, '1.22.0')
+
+# custom CFLAGS / environment pieces for the build
+os.environ['CCACHE_PREFIX'] = 'distcc'
+os.environ['CFLAGS'] = '-g -O0'
+os.environ['CC'] = 'ccache gcc'
+os.environ['CXX'] = 'ccache g++'
+
+# extra arguments to pass to all autogen.sh scripts
+# to speed up builds of GNOME, try '--disable-static --disable-gtk-doc'
+autogenargs='--disable-static --disable-gtk-doc'
+
+# A string listing additional arguments to be passed to make.
+# Set makeargs to 'V=1' for verbose build output.
+makeargs = '-j29 -l4'

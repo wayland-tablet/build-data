@@ -16,7 +16,7 @@ buildroot = checkoutroot
 # the prefix to configure/install modules to (must have write access)
 prefix = '~/Development/wayland-tablet/builddir/install'
 
-moduleset = [ 'gnome-apps-3.18', 'https://raw.githubusercontent.com/wayland-tablet/build-data/gnome-mods-3.18.modules' ]
+moduleset = [ 'gnome-apps-3.18', 'https://raw.githubusercontent.com/wayland-tablet/build-data/master/gnome-mods-3.18.modules' ]
 #use_local_modulesets = True
 
 modules = [ 'clutter', 'gtk+', 'libinput', 'mutter', 'wayland', 'wayland-protocols', 'weston', 'xwayland' ]

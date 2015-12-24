@@ -27,7 +27,7 @@
     <if condition-set="wayland">
       <autogenargs value="--enable-wayland-backend --enable-wayland-compositor --enable-evdev-input"/>
     </if>
-    <branch repo="wayland-tablet.github.com" revision="tablet-support-20151221"/>
+    <branch repo="wayland-tablet.github.com" revision="tablet-support-20151223"/>
     <dependencies>
       <dep package="cogl"/>
       <dep package="atk"/>
@@ -115,7 +115,7 @@
 
 
   <autotools id="libinput">
-    <branch repo="wayland-tablet.github.com" checkoutdir="libinput" revision="tablet-support-20151221" />
+    <branch repo="wayland-tablet.github.com" checkoutdir="libinput" revision="tablet-support-20151223" />
     <dependencies>
       <dep package="libevdev"/>
       <dep package="libudev"/>
@@ -131,7 +131,7 @@
 
 
   <autotools id="mutter" autogenargs="--enable-compile-warnings=maximum --enable-installed-tests">
-    <branch repo="wayland-tablet.github.com" revision="tablet-support-20151221" />
+    <branch repo="wayland-tablet.github.com" revision="tablet-support-20151223" />
     <dependencies>
       <dep package="cogl"/>
       <dep package="clutter"/>
@@ -171,7 +171,7 @@
 
   <autotools id="wayland"
              autogenargs="--disable-documentation">
-    <branch repo="wayland-tablet.github.com" revision="tablet-support-20151221"/>
+    <branch repo="wayland-tablet.github.com" revision="tablet-support-20151223"/>
     <dependencies>
       <dep package="libffi"/>
       <dep package="doxygen"/>
@@ -187,12 +187,12 @@
     of Mutter and xwayland that we build.
   -->
   <autotools id="wayland-protocols">
-    <branch repo="wayland-tablet.github.com" revision="tablet-support-20151221"/>
+    <branch repo="wayland-tablet.github.com" revision="tablet-support-20151223"/>
   </autotools>
 
 
   <autotools id="weston" autogenargs="--disable-setuid-install">
-    <branch repo="wayland-tablet.github.com" revision="tablet-support-20151221"/>
+    <branch repo="wayland-tablet.github.com" revision="tablet-support-20151223"/>
     <dependencies>
       <dep package="wayland"/>
       <dep package="cairo"/>
@@ -213,7 +213,7 @@
     <branch repo="wayland-tablet.github.com"
             checkoutdir="xwayland"
             module="xserver"
-            revision="tablet-support-20151221"/>
+            revision="tablet-support-20151223"/>
     <dependencies>
       <dep package="xfont"/>
       <dep package="xtrans"/>

@@ -1,0 +1,240 @@
+<?xml version="1.0" standalone="no"?> <!--*- mode: nxml -*-->
+<!DOCTYPE moduleset SYSTEM "moduleset.dtd">
+<?xml-stylesheet type="text/xsl" href="moduleset.xsl"?>
+<moduleset>
+
+<!-- git repos -->
+<repository type="git" name="gnome.github.org"
+    href="git://github.com/GNOME/"/>
+<repository type="git" name="wayland.freedesktop.org"
+    href="git://anongit.freedesktop.org/git/wayland"/>
+<repository type="git" name="wayland-tablet.github.com"
+    href="git://github.com/wayland-tablet/"/>
+<repository type="git" name="xorg.freedesktop.org"
+    href="git://anongit.freedesktop.org/git/xorg"/>
+
+<!-- tarball repos -->
+<repository type="tarball" name="github-tar"
+    href="https://github.com/"/>
+
+
+<include href="gnome-suites-core-deps-3.20.modules"/>
+
+<!-- Please try to keep organized alphabetically by section -->
+
+
+  <autotools id="clutter" autogenargs="--enable-installed-tests --enable-egl-backend">
+    <if condition-set="wayland">
+      <autogenargs value="--enable-wayland-backend --enable-wayland-compositor --enable-evdev-input"/>
+    </if>
+    <branch repo="wayland-tablet.github.com" revision="tablet-support-20160329"/>
+    <dependencies>
+      <dep package="cogl"/>
+      <dep package="atk"/>
+      <dep package="glib"/>
+      <dep package="cairo"/>
+      <dep package="json-glib"/>
+      <dep package="gobject-introspection"/>
+      <if condition-set="wayland">
+        <dep package="wayland"/>
+        <dep package="libxkbcommon"/>
+        <dep package="libinput"/>
+      </if>
+    </dependencies>
+    <suggests>
+      <dep package="gdk-pixbuf"/>
+      <if condition-set="wayland">
+        <dep package="gudev"/>
+      </if>
+    </suggests>
+  </autotools>
+
+
+  <autotools id="gtk+" autogenargs="--enable-broadway-backend --enable-installed-tests">
+    <if condition-set="x11">
+      <autogenargs value="--enable-x11-backend"/>
+    </if>
+    <if condition-set="wayland">
+      <autogenargs value="--enable-wayland-backend"/>
+    </if>
+    <if condition-set="mir">
+      <autogenargs value="--enable-mir-backend"/>
+    </if>
+    <if condition-set="quartz">
+      <autogenargs value="--enable-quartz-backend"/>
+    </if>
+    <branch repo="wayland-tablet.github.com"  revision="tablet-support-20160329"
+            checkoutdir="gtk+" module="gtk"/>
+    <dependencies>
+      <dep package="atk"/>
+      <dep package="glib"/>
+      <dep package="cairo"/>
+      <dep package="pango"/>
+      <dep package="gdk-pixbuf"/>
+      <dep package="gtk-doc"/>
+      <dep package="gobject-introspection"/>
+      <dep package="libepoxy"/>
+      <if condition-unset="quartz">
+        <dep package="at-spi2-atk"/>
+      </if>
+      <if condition-set="wayland">
+        <dep package="libxkbcommon"/>
+        <dep package="wayland"/>
+        <dep package="wayland-egl"/>
+      </if>
+      <if condition-set="mir">
+        <dep package="mir"/>
+      </if>
+    </dependencies>
+    <suggests>
+      <dep package="shared-mime-info"/>
+      <dep package="adwaita-icon-theme"/>
+    </suggests>
+  </autotools>
+
+
+  <!--
+    gnome-suites-core-deps-3.18.modules specifies that we want to build
+    the 1.7.0 version of ibus-libpinyin. Unfortunately, changes in system-
+    provided libraries prevent it from compiling anymore. Instead, use
+    version 1.7.3.
+  -->
+  <autotools id="ibus-libpinyin"
+             autogenargs="--disable-lua-extension --with-python=python3">
+    <branch repo="github-tar"
+            version="1.7.3"
+            module="libpinyin/ibus-libpinyin/archive/${version}.tar.gz"
+            checkoutdir="ibus-libpinyin-${version}"
+            hash="sha256:458b082223ac8f030ae33253eaaba18ba7d20a57b83747257bb79d922d8b0895"/>
+    <dependencies>
+      <dep package="ibus"/>
+      <dep package="libpinyin"/>
+      <dep package="sqlite3"/>
+    </dependencies>
+  </autotools>
+
+
+  <autotools id="libinput">
+    <branch repo="wayland-tablet.github.com" checkoutdir="libinput" revision="master" />
+    <dependencies>
+      <dep package="libevdev"/>
+      <dep package="libudev"/>
+      <dep package="mtdev"/>
+    </dependencies>
+  </autotools>
+
+
+  <!-- The "desrt/m4-common" repository has disappeared. Use GNOME's mirror instead. -->
+  <autotools id="m4-common">
+    <branch repo="gnome.github.org" module="m4-common.git"/>
+  </autotools>
+
+
+  <autotools id="mutter" autogenargs="--enable-compile-warnings=maximum --enable-installed-tests">
+    <branch repo="wayland-tablet.github.com" revision="tablet-support-20160329" />
+    <dependencies>
+      <dep package="cogl"/>
+      <dep package="clutter"/>
+      <dep package="gdk-pixbuf"/>
+      <dep package="glib"/>
+      <dep package="gnome-desktop"/>
+      <dep package="gobject-introspection"/>
+      <dep package="gsettings-desktop-schemas"/>
+      <dep package="gtk+"/>
+      <dep package="gtk-doc"/>
+      <dep package="intltool"/>
+      <dep package="libcanberra"/>
+      <dep package="libXdamage"/>
+      <dep package="libXext"/>
+      <dep package="libXfixes"/>
+      <dep package="libXi"/>
+      <dep package="libXinerama"/>
+      <dep package="libXcomposite"/>
+      <dep package="libXrandr"/>
+      <dep package="libxkbcommon"/>
+      <dep package="pango"/>
+      <dep package="sm"/>
+      <dep package="startup-notification"/>
+      <dep package="upower"/>
+      <dep package="zenity"/>
+      <if condition-set="wayland">
+        <dep package="gbm"/>
+        <dep package="libdrm"/>
+        <dep package="libsystemd"/>
+        <dep package="wayland"/>
+        <dep package="wayland-protocols"/>
+       <dep package="xwayland"/>
+      </if>
+    </dependencies>
+  </autotools>
+
+
+  <autotools id="wayland"
+             autogenargs="--disable-documentation">
+    <branch repo="wayland-tablet.github.com" revision="master"/>
+    <dependencies>
+      <dep package="libffi"/>
+      <dep package="doxygen"/>
+      <dep package="xmlto"/>
+    </dependencies>
+  </autotools>
+
+
+  <!--
+    gnome-suites-core-deps-3.18.modules doesn't list wayland-protocols
+    as a program at all. The experimental tablet protocol lives in this
+    repository though, and is required to be installed for the versions
+    of Mutter and xwayland that we build.
+  -->
+  <autotools id="wayland-protocols">
+    <branch repo="wayland-tablet.github.com" revision="master"/>
+  </autotools>
+
+
+  <autotools id="weston" autogenargs="--disable-setuid-install">
+    <branch repo="wayland-tablet.github.com" revision="tablet-support-20160329"/>
+    <dependencies>
+      <dep package="wayland"/>
+      <dep package="cairo"/>
+      <dep package="libxkbcommon"/>
+      <dep package="mesa-libGLES"/>
+    </dependencies>
+  </autotools>
+
+
+  <!--
+    gnome-sysdeps-3.20.modules changes xwayland to be a system dep, which
+    causes jhbuild to ignore the fact that we're making modifications to
+    a local tree. Restore xwayland as an autoools dependency that will
+    be built from source.
+  -->
+  <autotools id="xwayland"
+             autogenargs="--with-xkb-bin-directory=/usr/bin --with-xkb-path=/usr/share/X11/xkb --with-xkb-output=${prefix}/share/X11/xkb/compiled --enable-xwayland">
+    <branch repo="wayland-tablet.github.com"
+            checkoutdir="xwayland"
+            module="xserver"
+            revision="tablet-support-20160329"/>
+    <dependencies>
+      <dep package="xfont"/>
+      <dep package="xtrans"/>
+      <dep package="wayland"/>
+      <dep package="libepoxy"/>
+      <dep package="pciaccess"/>
+      <dep package="wayland-protocols"/>
+      <dep package="xorg-xcmiscproto"/>
+      <dep package="xorg-bigreqsproto"/>
+      <dep package="xorg-scrnsaverproto"/>
+      <dep package="xorg-randrproto"/>
+      <dep package="xorg-xproto"/>
+      <dep package="xorg-resourceproto"/>
+      <dep package="xorg-xf86driproto"/>
+      <dep package="xorg-presentproto"/>
+      <dep package="xorg-videoproto"/>
+      <dep package="xcb-keysyms"/>
+      <if condition-set="systemd">
+        <dep package="libsystemd-daemon"/>
+      </if>
+    </dependencies>
+  </autotools>
+
+</moduleset>
